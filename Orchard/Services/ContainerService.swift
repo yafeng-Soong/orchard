@@ -5,7 +5,7 @@ import AppKit
 
 @MainActor
 class ContainerService: ObservableObject {
-    let supportedContainerVersion = "0.7.0"
+    let supportedContainerVersion = "0.7.1"
 
     @Published var containers: [Container] = []
     @Published var images: [ContainerImage] = []
@@ -208,7 +208,7 @@ class ContainerService: ObservableObject {
 
         return false
     }
-    
+
     private static func compareVersions(_ lhs: String, _ rhs: String) -> Int {
         let lhsParts = lhs.split(separator: ".").compactMap { Int($0) }
         let rhsParts = rhs.split(separator: ".").compactMap { Int($0) }
@@ -759,7 +759,7 @@ class ContainerService: ObservableObject {
         if !self.systemStatusVersionOverride {
             // First check if container CLI is available and get version
             await checkContainerVersion()
-            
+
             let status = await MainActor.run(body: { self.systemStatus })
             if status == .unsupportedVersion || status == .newerVersion {
                 return
@@ -782,7 +782,7 @@ class ContainerService: ObservableObject {
             }
         }
     }
-    
+
     func checkSystemStatusIgnoreVersion() async {
         self.systemStatusVersionOverride = true
         await checkSystemStatus()
@@ -959,7 +959,7 @@ class ContainerService: ObservableObject {
             containerOperationLocks.insert(id)
             return true
         }
-        
+
         defer {
             let _ = lockQueue.sync(flags: .barrier) {
                 containerOperationLocks.remove(id)
@@ -2393,4 +2393,3 @@ class ContainerService: ObservableObject {
 typealias Containers = [Container]
 typealias Images = [ContainerImage]
 typealias Builders = [Builder]
-
